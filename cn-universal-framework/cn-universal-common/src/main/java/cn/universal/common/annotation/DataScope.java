@@ -10,7 +10,7 @@
  *
  */
 
-package cn.universal.admin.common.annotation;
+package cn.universal.common.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

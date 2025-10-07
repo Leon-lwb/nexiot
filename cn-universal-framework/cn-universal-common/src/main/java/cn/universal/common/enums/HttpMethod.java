@@ -10,7 +10,7 @@
  *
  */
 
-package cn.universal.admin.common.enums;
+package cn.universal.common.enums;
 
 import java.util.HashMap;
 import java.util.Map;

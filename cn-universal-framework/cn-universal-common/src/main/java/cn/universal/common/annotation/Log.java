@@ -10,10 +10,10 @@
  *
  */
 
-package cn.universal.admin.common.annotation;
+package cn.universal.common.annotation;
 
-import cn.universal.admin.common.enums.BusinessType;
-import cn.universal.admin.common.enums.OperatorType;
+import cn.universal.common.enums.BusinessType;
+import cn.universal.common.enums.OperatorType;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

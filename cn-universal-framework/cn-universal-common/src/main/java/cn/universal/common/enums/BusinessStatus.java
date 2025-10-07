@@ -10,16 +10,13 @@
  *
  */
 
-package cn.universal.admin.common.enums;
+package cn.universal.common.enums;
 
-/** 操作人类别枚举 */
-public enum OperatorType {
-  /** 其它 */
-  OTHER,
+/** 操作状态枚举 */
+public enum BusinessStatus {
+  /** 成功 */
+  SUCCESS,
 
-  /** 后台用户 */
-  MANAGE,
-
-  /** 手机端用户 */
-  MOBILE
+  /** 失败 */
+  FAIL,
 }

@@ -10,30 +10,32 @@
  *
  */
 
-package cn.universal.admin.system.service;
+package cn.universal.security.service;
 
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.universal.common.constant.Constants;
 import cn.universal.common.utils.IPUtils;
+import cn.universal.common.utils.LocationUtils;
 import cn.universal.common.utils.ServletUtils;
 import cn.universal.persistence.entity.SysLogininfor;
 import cn.universal.persistence.entity.SysOperLog;
+import cn.universal.persistence.mapper.SysLogininforMapper;
+import cn.universal.persistence.mapper.SysOperLogMapper;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-/** 异步工厂（产生任务用） @Author Lion Li */
+/** 日志记录 */
 @Slf4j
-@Async
 @Component
-public class AsyncService {
+public class AdminLogService {
 
-  @Autowired private ISysLogininforService iSysLogininforService;
+  @Resource private SysLogininforMapper sysLogininforMapper;
 
-  @Autowired private ISysOperLogService iSysOperLogService;
+  @Resource private SysOperLogMapper sysOperLogMapper;
 
   /**
    * 记录登录信息
@@ -56,21 +58,7 @@ public class AsyncService {
       } catch (Exception e) {
         log.warn("无法获取HttpServletRequest，使用默认值记录登录信息: {}", e.getMessage());
         // 创建默认的登录信息记录
-        SysLogininfor logininfor = new SysLogininfor();
-        logininfor.setUserName(username);
-        logininfor.setIpaddr("unknown");
-        logininfor.setLoginLocation("unknown");
-        logininfor.setBrowser("unknown");
-        logininfor.setOs("unknown");
-        logininfor.setMsg(message);
-        // 日志状态
-        if (Constants.LOGIN_SUCCESS.equals(status) || Constants.LOGOUT.equals(status)) {
-          logininfor.setStatus(Constants.SUCCESS);
-        } else if (Constants.LOGIN_FAIL.equals(status)) {
-          logininfor.setStatus(Constants.FAIL);
-        }
-        // 插入数据
-        iSysLogininforService.insertLogininfor(logininfor);
+        recordLogininforWithDefaults(username, status, message);
         return;
       }
     }
@@ -82,9 +70,13 @@ public class AsyncService {
     String os = userAgent.getOs().getName();
     // 浏览器
     String browser = userAgent.getBrowser().getName();
+    // 根据IP地址获取地理位置
+    String location = LocationUtils.getLocationByIp(ip);
+    
     SysLogininfor login = new SysLogininfor();
     login.setUserName(username);
     login.setIpaddr(ip);
+    login.setLoginLocation(location);
     login.setBrowser(browser);
     login.setOs(os);
     login.setMsg(message);
@@ -94,8 +86,39 @@ public class AsyncService {
     } else if (Constants.LOGIN_FAIL.equals(status)) {
       login.setStatus(Constants.FAIL);
     }
+    login.setLoginTime(new Date());
     // 插入数据
-    iSysLogininforService.insertLogininfor(login);
+    sysLogininforMapper.insert(login);
+  }
+
+  /**
+   * 使用默认值记录登录信息（用于无法获取HttpServletRequest的情况）
+   *
+   * @param username 用户名
+   * @param status 状态
+   * @param message 消息
+   */
+  private void recordLogininforWithDefaults(
+      final String username,
+      final String status,
+      final String message) {
+    // 创建默认的登录信息记录
+    SysLogininfor logininfor = new SysLogininfor();
+    logininfor.setUserName(username);
+    logininfor.setIpaddr("unknown");
+    logininfor.setLoginLocation("未知");
+    logininfor.setBrowser("unknown");
+    logininfor.setOs("unknown");
+    logininfor.setMsg(message);
+    // 日志状态
+    if (Constants.LOGIN_SUCCESS.equals(status) || Constants.LOGOUT.equals(status)) {
+      logininfor.setStatus(Constants.SUCCESS);
+    } else if (Constants.LOGIN_FAIL.equals(status)) {
+      logininfor.setStatus(Constants.FAIL);
+    }
+    // 插入数据
+    logininfor.setLoginTime(new Date());
+    sysLogininforMapper.insert(logininfor);
   }
 
   /**
@@ -105,7 +128,7 @@ public class AsyncService {
    */
   public void recordOper(final SysOperLog operLog) {
     // 远程查询操作地点
-    operLog.setOperLocation(operLog.getOperIp());
-    iSysOperLogService.insertOperlog(operLog);
+    operLog.setOperTime(new Date());
+    sysOperLogMapper.insert(operLog);
   }
 }

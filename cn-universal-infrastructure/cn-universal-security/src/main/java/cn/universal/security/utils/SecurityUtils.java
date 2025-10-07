@@ -10,14 +10,14 @@
  *
  */
 
-package cn.universal.admin.common.utils;
+package cn.universal.security.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpStatus;
-import cn.universal.admin.system.service.IIotUserService;
 import cn.universal.common.exception.BaseException;
 import cn.universal.common.exception.IoTException;
 import cn.universal.persistence.entity.IoTUser;
+import cn.universal.security.service.IoTUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,8 +93,8 @@ public class SecurityUtils {
       throw new BaseException("获取用户信息异常", HttpStatus.HTTP_UNAUTHORIZED + "");
     }
     try {
-      IIotUserService iIotUserService = applicationContext.getBean(IIotUserService.class);
-      return iIotUserService.selectUserByUserName(username);
+      IoTUserService ioTUserService = applicationContext.getBean(IoTUserService.class);
+      return ioTUserService.selectUserByUserName(username);
     } catch (Exception e) {
       throw new BaseException("获取用户信息异常", HttpStatus.HTTP_UNAUTHORIZED + "");
     }
@@ -106,8 +106,8 @@ public class SecurityUtils {
       throw new BaseException("获取用户信息异常", HttpStatus.HTTP_UNAUTHORIZED + "");
     }
     try {
-      IIotUserService iIotUserService = applicationContext.getBean(IIotUserService.class);
-      return iIotUserService.selectUserByUnionId(unionId);
+      IoTUserService ioTUserService = applicationContext.getBean(IoTUserService.class);
+      return ioTUserService.selectUserByUnionId(unionId);
     } catch (Exception e) {
       throw new BaseException("获取用户信息异常", HttpStatus.HTTP_UNAUTHORIZED + "");
     }
@@ -132,12 +132,11 @@ public class SecurityUtils {
   /**
    * 判断密码是否相同
    *
-   * @param rawPassword 真实密码
-   * @param encodedPassword 加密后字符
-   * @return 结果
+   * @param realPwd 真实密码
+   * @param hexPwd 加密后字符
    */
-  public static boolean matchesPassword(String rawPassword, String encodedPassword) {
+  public static boolean matchesPassword(String realPwd, String hexPwd) {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    return passwordEncoder.matches(rawPassword, encodedPassword);
+    return passwordEncoder.matches(realPwd, hexPwd);
   }
 }

@@ -1,14 +1,14 @@
-package cn.universal.admin.system.web;
+package cn.universal.security;
 
-import cn.universal.admin.common.utils.PageUtils;
-import cn.universal.admin.common.utils.SecurityUtils;
-import cn.universal.admin.system.service.IIotUserService;
 import cn.universal.common.utils.StringUtils;
 import cn.universal.persistence.entity.IoTUser;
 import cn.universal.persistence.page.PageDomain;
+import cn.universal.persistence.page.PageUtils;
 import cn.universal.persistence.page.TableDataInfo;
 import cn.universal.persistence.page.TableSupport;
 import cn.universal.persistence.query.AjaxResult;
+import cn.universal.security.service.IoTUserService;
+import cn.universal.security.utils.SecurityUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -27,7 +27,7 @@ public class BaseController {
 
   protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Resource private IIotUserService iIotUserService;
+  @Resource private IoTUserService ioTUserService;
 
   /** 日期格式字符串自动转换Date */
   @InitBinder
@@ -45,16 +45,16 @@ public class BaseController {
 
   @Cacheable(cacheNames = "user_parent_entity", key = "''+#unionId", unless = "#result == null")
   public IoTUser loginIoTUnionUser(String unionId) {
-    IoTUser iotUser = iIotUserService.selectUserByUnionId(unionId);
+    IoTUser iotUser = ioTUserService.selectUserByUnionId(unionId);
     if (iotUser.getParentUnionId() != null) {
-      iotUser = iIotUserService.selectUserByUnionId(iotUser.getParentUnionId());
+      iotUser = ioTUserService.selectUserByUnionId(iotUser.getParentUnionId());
       return iotUser;
     }
     return iotUser;
   }
 
   public boolean isAdmin() {
-    IoTUser iotUser = iIotUserService.selectUserByUnionId(SecurityUtils.getUnionId());
+    IoTUser iotUser = ioTUserService.selectUserByUnionId(SecurityUtils.getUnionId());
     return iotUser.isAdmin();
   }
 
@@ -73,9 +73,8 @@ public class BaseController {
   }
 
   /** 响应请求分页数据 */
-  @SuppressWarnings({"rawtypes", "unchecked"})
   protected <T> TableDataInfo<T> getDataTable(List<T> list, Integer total) {
-    TableDataInfo rspData = new TableDataInfo();
+    TableDataInfo<T> rspData = new TableDataInfo<>();
     // 请求成功返回0
     rspData.setCode(0);
     rspData.setMsg("查询成功");
@@ -85,9 +84,8 @@ public class BaseController {
   }
 
   /** 响应请求分页数据 */
-  @SuppressWarnings({"rawtypes", "unchecked"})
   protected <T> TableDataInfo<T> getDataTable(List<T> list) {
-    TableDataInfo rspData = new TableDataInfo();
+    TableDataInfo<T> rspData = new TableDataInfo<>();
     // 请求成功返回0
     rspData.setCode(0);
     rspData.setMsg("查询成功");

@@ -10,7 +10,7 @@
  *
  */
 
-package cn.universal.admin.common.enums;
+package cn.universal.common.enums;
 
 /** 业务操作类型枚举 */
 public enum BusinessType {

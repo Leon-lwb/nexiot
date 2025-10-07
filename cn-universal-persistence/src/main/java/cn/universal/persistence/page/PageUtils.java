@@ -10,12 +10,9 @@
  *
  */
 
-package cn.universal.admin.common.utils;
+package cn.universal.persistence.page;
 
 import cn.universal.common.utils.StringUtils;
-import cn.universal.persistence.page.PageDomain;
-import cn.universal.persistence.page.TableDataInfo;
-import cn.universal.persistence.page.TableSupport;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.List;
@@ -35,8 +32,8 @@ public class PageUtils extends PageHelper {
   }
 
   /** 封装分页数据 */
-  public static <T> TableDataInfo getDataTable(List<T> list) {
-    TableDataInfo rspData = new TableDataInfo();
+  public static <T> TableDataInfo<T> getDataTable(List<T> list) {
+    TableDataInfo<T> rspData = new TableDataInfo<>();
     rspData.setCode(0);
     rspData.setRows(list);
     rspData.setMsg("查询成功");

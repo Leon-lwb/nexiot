@@ -13,13 +13,11 @@
  *
  */
 
-package cn.universal.admin.system.service.impl;
+package cn.universal.security.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.IdUtil;
-import cn.universal.admin.system.service.IIotUserService;
-import cn.universal.admin.system.service.ISysRoleService;
 import cn.universal.common.constant.IoTUserConstants;
 import cn.universal.common.exception.IoTException;
 import cn.universal.common.utils.StringUtils;
@@ -30,6 +28,7 @@ import cn.universal.persistence.entity.bo.IoTUserBO;
 import cn.universal.persistence.mapper.IoTDeviceMapper;
 import cn.universal.persistence.mapper.IoTUserMapper;
 import cn.universal.persistence.mapper.admin.SysUserRoleMapper;
+import cn.universal.security.service.IoTUserService;
 import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,14 +45,13 @@ import tk.mybatis.mapper.entity.Example;
 /** 用户 业务层处理 @Author ruoyi */
 @Slf4j
 @Service
-public class IoTUserServiceImpl implements IIotUserService {
+public class IoTUserServiceImpl implements IoTUserService {
 
   @Resource private IoTUserMapper iotUserMapper;
   @Resource private SysUserRoleMapper userRoleMapper;
   // @Resource
   // private OauthClientDetailsMapper oauthClientDetailsMapper;
   @Resource private IoTDeviceMapper ioTDeviceMapper;
-  @Resource private ISysRoleService iSysRoleService;
 
   @Override
   // @DataScope(alias = "", created = "u.create_by")
@@ -76,7 +74,6 @@ public class IoTUserServiceImpl implements IIotUserService {
   public IoTUser selectUserByUnionId(String unionId) {
     Example ex = new Example(IoTUser.class);
     ex.createCriteria().andEqualTo("unionId", unionId).andEqualTo("deleted", 0);
-    ;
     return iotUserMapper.selectOneByExample(ex);
   }
 
@@ -224,7 +221,7 @@ public class IoTUserServiceImpl implements IIotUserService {
   public void insertUserRole(IoTUserBO user) {
     Long[] roles = user.getRoleIds();
     if (StringUtils.isNotNull(roles)) {
-      // 新增用户与角色管理
+      // 增加用户与角色
       List<SysUserRole> list = new ArrayList<SysUserRole>();
       for (Long roleId : roles) {
         SysUserRole ur = new SysUserRole();
@@ -241,12 +238,12 @@ public class IoTUserServiceImpl implements IIotUserService {
   /**
    * 删除用户角色信息
    *
-   * @param user 用户对象
+   * @param ioTUserBO 用户对象
    */
-  public void deleteUserRoleByUnionId(IoTUserBO user) {
-    if (user.getRoleIds() != null) {
+  public void deleteUserRoleByUnionId(IoTUserBO ioTUserBO) {
+    if (ioTUserBO.getRoleIds() != null) {
       Example ex = new Example(SysUserRole.class);
-      ex.createCriteria().andEqualTo("unionId", user.getUnionId());
+      ex.createCriteria().andEqualTo("unionId", ioTUserBO.getUnionId());
       userRoleMapper.deleteByExample(ex);
     }
   }
@@ -264,16 +261,5 @@ public class IoTUserServiceImpl implements IIotUserService {
     ex.createCriteria().andEqualTo("unionId", unionId);
     userRoleMapper.deleteByExample(ex);
     insertUserRole(IoTUserBO.builder().unionId(unionId).roleIds(roleIds).build());
-  }
-
-  @Override
-  @Transactional
-  public void addSubAccount(Long id, String unionId, int isSub) {
-    // isSub为1时为授权绑定 否则为取消授权
-    if (isSub == 1) {
-      updateUserById(IoTUser.builder().id(id).parentUnionId(unionId).build());
-    } else {
-      updateUserById(IoTUser.builder().id(id).parentUnionId("").build());
-    }
   }
 }
