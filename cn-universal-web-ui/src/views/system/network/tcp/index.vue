@@ -27,6 +27,12 @@
                       <span>UDP服务</span>
                     </span>
                   </a-select-option>
+                  <a-select-option value="WEB_SOCKET_SERVER">
+                    <span class="type-cell">
+                      <a-icon type="swap" style="color: #fa8c16; margin-right: 8px;"/>
+                      <span>WebSocket服务</span>
+                    </span>
+                  </a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -123,6 +129,7 @@
               <span v-if="item.type === 'TCP_SERVER'" class="tcp-badge-server">服务端</span>
               <span v-if="item.type === 'TCP_CLIENT'" class="tcp-badge-client">客户端</span>
               <span v-if="item.type === 'UDP'" class="tcp-badge-udp">UDP</span>
+              <span v-if="item.type === 'WEB_SOCKET_SERVER'" class="tcp-badge-websocket">WebSocket</span>
             </div>
 
             <div class="card-header">
@@ -257,10 +264,10 @@
 </template>
 
 <script>
-import {delNetwork, delNetworkBatch, listNetwork, startNetwork, stopNetwork} from '@/api/system/network'
-import {listProduct} from '@/api/system/dev/product'
-import CreateForm from '../modules/CreateForm'
-import {parseTime} from '@/utils/ruoyi'
+import { listProduct } from '@/api/system/dev/product';
+import { delNetwork, delNetworkBatch, listNetwork, startNetwork, stopNetwork } from '@/api/system/network';
+import { parseTime } from '@/utils/ruoyi';
+import CreateForm from '../modules/CreateForm';
 
 export default {
   name: 'TcpNetwork',
@@ -291,7 +298,8 @@ export default {
       tcpTypeOptions: [
         // {dictValue: 'TCP_CLIENT', dictLabel: 'TCP客户端'},
         {dictValue: 'TCP_SERVER', dictLabel: 'TCP服务端'},
-        {dictValue: 'UDP', dictLabel: 'UDP服务'}
+        {dictValue: 'UDP', dictLabel: 'UDP服务'},
+        {dictValue: 'WEB_SOCKET_SERVER', dictLabel: 'WebSocket服务端'}
       ],
       // 产品选项
       productOptions: [],
@@ -358,7 +366,7 @@ export default {
       // 只查询TCP类型的网络组件
       const params = {...this.queryParam}
       if (!params.type) {
-        params.type = ['TCP_CLIENT', 'TCP_SERVER', "UDP"]
+        params.type = ['TCP_CLIENT', 'TCP_SERVER', 'UDP', 'WEB_SOCKET_SERVER']
       }
 
       listNetwork(params).then(response => {
@@ -873,6 +881,11 @@ export default {
 }
 
 .tcp-badge-udp {
+  color: #8c8c8c;
+  background: #fafafa;
+}
+
+.tcp-badge-websocket {
   color: #8c8c8c;
   background: #fafafa;
 }
