@@ -325,9 +325,19 @@
 
 ### 📨 MQTT接入教程
 
-| 序号 | 教程名称 | 视频链接 |
-|:---:|:---|:---|
-| 1 | 任意主题Topic与全流程对接教程 | [📺 B站观看](https://www.bilibili.com/video/BV1q1UZBmEHS/?share_source=copy_web&vd_source=c9e1500efcc8aa0763f711fadaa68dff) |
+| 序号 | 教程名称              | 视频链接                                                                                                                     |
+|:--:|:------------------|:-------------------------------------------------------------------------------------------------------------------------|
+| 1  | 任意主题Topic与全流程对接教程 | [📺 B站观看](https://www.bilibili.com/video/BV1q1UZBmEHS/?share_source=copy_web&vd_source=c9e1500efcc8aa0763f711fadaa68dff) |
+| 2  | 网关与子设备 接入教程       | [📺 B站观看](https://www.bilibili.com/video/BV1G73R6zEjm/?vd_source=c60acd764e54eb105ee4021843ac245f)                       |
+| 3  | 工业采集 Modbus 从零保姆教程| [📺 B站观看](https://www.bilibili.com/video/BV13eNc6qEPw/)                       |
+
+
+### 📨 有必要看
+
+| 序号 | 教程名称                        | 视频链接 |
+|:---:|:----------------------------|:---|
+| 1 | 核心技术设计分享，产品驱动！花十分钟时间你可以了解明白。| [📺 B站观看](https://www.bilibili.com/video/BV1wfYv6xEPA/) |
+
 
 
 ### 🌐 社区联系方式
