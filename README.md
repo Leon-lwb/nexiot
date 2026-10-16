@@ -15,7 +15,7 @@
 
 > **💡 突破传统物联网平台设计思路 · 设备驱动完全外置 · 一键导出即用 · 零代码侵入**
 
-[📖 文档地址](https://nexiotplatform.github.io/universal-iot-docs/) | [🌐 在线演示](http://iot.192886.xyz:81/) | [🔧 AI调试IDE](http://iot.192886.xyz:81/magic/debug/index.html)
+[📖 文档地址](https://docs.nexiot.cc/) | [🌐 在线演示](http://test.iot.192886.xyz:81/) | [🔧 AI调试IDE](http://iot.192886.xyz:81/magic/debug/index.html)
 
 **中文 | [English](README_EN.md)**
 
@@ -92,14 +92,10 @@
 
 ### 🎯 演示地址（企业版）
 
-> **✨ 全部真实设备，驱动源码开放，全部透明可见！**
-
-> **💎 由 [风铃云](https://www.aeoliancloud.com/cart/goodsList.htm) 独家赞助 NexIoT 在线演示服务器**
-
-- **🌐 演示地址**：<http://demo.nexiot.cc/>
-- **🔧 调试IDE**：<http://demo.nexiot.cc/magic/debug/index.html>
+- **🌐 演示地址**：<https://nexiot.cc/>
+- **🔧 调试IDE**：<http://test.iot.192886.xyz:81/magic/debug/index.html>
 - **👤 演示账号**：`test`
-- **🔑 演示密码**：关注【开源啦】公众号即可获取。获取如果打不开请加微信：outlookFil
+- **🔑 演示密码**：关注【理理的理一理】公众号即可获取。获取如果打不开请加微信：outlookFil
 - **📖 文档地址**：<https://docs.nexiot.cc/>
 
 
